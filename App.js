@@ -39,12 +39,10 @@ const App: () => Node = () => {
   };
 
   async function checkPreviousSession() {
-    console.log('Je test le crash !');
     const didCrash = await Crashes.hasCrashedInLastSession();
     if (didCrash) {
       alert('Sorry about that crash !');
     }
-    console.log('Finit !!! ');
   }
 
   useEffect(() => {
