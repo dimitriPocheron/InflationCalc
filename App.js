@@ -6,9 +6,10 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {Node} from 'react';
 import {
+  Alert,
   Button,
   SafeAreaView,
   ScrollView,
@@ -27,6 +28,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import Crashes from 'appcenter-crashes';
+import Analytics from 'appcenter-analytics';
+
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -34,14 +38,27 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  async function checkPreviousSession() {
+    console.log('Je test le crash !');
+    const didCrash = await Crashes.hasCrashedInLastSession();
+    if (didCrash) {
+      alert('Sorry about that crash !');
+    }
+    console.log('Finit !!! ');
+  }
+
+  useEffect(() => {
+    checkPreviousSession();
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View style={styles.container}>
         <Button
-          title="Crash"
+          title="Calculate inflation"
           onPress={() => {
-            throw new Error('Error is coming !');
+            Analytics.trackEvent('calculate_inflation');
           }}
         />
       </View>
